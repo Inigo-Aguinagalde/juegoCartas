@@ -8,9 +8,13 @@
     <title>Document</title>
     <script src="http://185.60.40.210/2daw3/FuncionesJuegos.js"></script>
     <script>
-        var can=0;
+        var can = 0;
         var carta1;
         var carta2;
+        var check1 = [];
+        var check2 = [];
+        var id1;
+        var id2;
         do {
             var cartas = parseInt(prompt("Introduzca las cartas deseadas para el juego entre 1 y 20 "), 10);
             if (cartas > 21 || cartas < 0) {
@@ -37,7 +41,7 @@
 
         const N = cartas;
         const M = palos;
-        const aEstado = ("1").repeat(N).split("").map(() => new Array(M).fill(false))
+        var aEstado = ("1").repeat(N).split("").map(() => new Array(M).fill(false))
 
 
         document.write("<table>");
@@ -51,20 +55,66 @@
         document.write("</table>");
 
         function swap(object, j, i) {
-            can++;
-
-
-
+            can = can + 1
             carta = baraja[j][i]
 
-            alert(carta)
             document.getElementById(object.id).src = `images/${carta}.png`
+            if (carta1 == undefined) {
+                carta1 = baraja[j][i]
+                check1[0] = j;
+                check1[1] = i;
+                id1 = object.id;
+            } else {
+                carta2 = baraja[j][i];
+                check2[0] = j;
+                check2[1] = i;
+                id2 = object.id;
+            }
+
+            if (can == 2) {
+                check(carta1, carta2, check1, check2, id1, id2)
+            }
+
+
         }
 
-        function check(){
+        function check(carta1, carta2, check1, check2, id1, id2) {
+            if (carta1 == carta2) {
+                aEstado[check1[0]][check1[1]] = true;
+                aEstado[check2[0]][check2[1]] = true;
+                alert("acierto")
+                carta1 = undefined;
+                carta2 = undefined;
+                can = 0;
+                id1 = 0;
+                id2 = 0;
+                check1[0] = null;
+                check1[1] = null;
+                check2[0] = null;
+                check2[1] = null;
+                terminar()
+            } else {
+                setTimeout(() => {
+                    document.getElementById(id1).src = "images/0.png";
+                    document.getElementById(id2).src = "images/0.png";
+                    carta1 = undefined;
+                    carta2 = undefined;
+                    can = 0;
+                    id1 = 0;
+                    id2 = 0;
+                    check1[0] = null;
+                    check1[1] = null;
+                    check2[0] = null;
+                    check2[1] = null;
+                }, 1000)
 
+            }
         }
 
+        function terminar() {
+
+            aEstado.every(element => element === true);
+        }
 
 
     </script>

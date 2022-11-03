@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="http://185.60.40.210/2daw3/FuncionesJuegos.js"></script>
+    <script>
+        var can=0;
+        var carta1;
+        var carta2;
+        do {
+            var cartas = parseInt(prompt("Introduzca las cartas deseadas para el juego entre 1 y 20 "), 10);
+            if (cartas > 21 || cartas < 0) {
+                alert("el numero introducicdo no es valido");
+                cartas = "f";
+            }
+        } while (isNaN(cartas));
+
+        Number(cartas);
+
+        do {
+            var palos = parseInt(prompt("Introduzca las cartas deseadas para el juego entre 1 y 20 "), 10);
+            if (palos > 21 || palos < 0) {
+                alert("el numero introducicdo no es valido");
+                palos = "f";
+            }
+        } while (isNaN(palos));
+
+        Number(palos);
+
+
+        baraja = CrearTablaCartas(cartas, palos)
+
+
+        const N = cartas;
+        const M = palos;
+        const aEstado = ("1").repeat(N).split("").map(() => new Array(M).fill(false))
+
+
+        document.write("<table>");
+        for (let j = 0; j < baraja.length; j++) {
+            document.write("<tr>");
+            for (let i = 0; i < baraja[j].length; i++) {
+                document.write(`<th><img id="carta${j}${i}"src="images/0.png" onclick="swap(this,${j},${i})"></th>`);
+            }
+            document.write("</tr>")
+        }
+        document.write("</table>");
+
+        function swap(object, j, i) {
+            can++;
+
+
+
+            carta = baraja[j][i]
+
+            alert(carta)
+            document.getElementById(object.id).src = `images/${carta}.png`
+        }
+
+        function check(){
+
+        }
+
+
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

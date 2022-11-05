@@ -17,26 +17,13 @@
         var check2 = [];
         var id1;
         var id2;
-        // do {
-        //     var cartas = parseInt(prompt("Introduzca las cartas deseadas para el juego entre 1 y 20 "), 10);
-        //     if (cartas > 21 || cartas < 0) {
-        //         alert("el numero introducicdo no es valido");
-        //         cartas = "f";
-        //     }
-        // } while (isNaN(cartas));
+        var min = 0;
+        var sec = 0;
+        var click = 0;
+        var tiempo = false;
+        var bTimeout = false;
 
-        // Number(cartas);
-
-        // do {
-        //     var palos = parseInt(prompt("Introduzca las cartas deseadas para el juego entre 1 y 20 "), 10);
-        //     if (palos > 21 || palos < 0) {
-        //         alert("el numero introducicdo no es valido");
-        //         palos = "f";
-        //     }
-        // } while (isNaN(palos));
-
-        // Number(palos);
-        cartas = 2;
+        cartas = 4;
         palos = 10;
 
         baraja = CrearTablaCartas(cartas, palos)
@@ -47,7 +34,7 @@
         var aEstado = ("1").repeat(N).split("").map(() => new Array(M).fill(false))
 
 
-        document.write("<table  id='table' border='1' style='border-collapse: collapse'>");
+        document.write("<table  id='table' border='1' style='border-collapse: collapse;'>");
         for (let j = 0; j < baraja.length; j++) {
             document.write("<tr>");
             for (let i = 0; i < baraja[j].length; i++) {
@@ -56,11 +43,16 @@
             document.write("</tr>")
         }
         document.write("</table>");
+        document.write(`<p id='pClicks'>Cantidad de clicks: <text id='tCLick'>0</text></p>`)
+        document.write(`<p id='pTiempo'>Tiempo trancurrido: <text id='tMin'>0</text><text>:</text><text id='tSec'>0</text></p>`)
 
         function swap(object, j, i) {
             contador = contador + 1
             carta = baraja[j][i]
-
+            if (!tiempo) {
+                timer();
+                tiempo = true;
+            }
             document.getElementById(object.id).src = `images/${carta}.png`
             if (carta1 === undefined) {
                 carta1 = carta
@@ -76,14 +68,56 @@
                 id2 = object.id;
             }
 
+            if(id1 == id2){
+                alert("Has seleccionado la misma carta 2 veces elige otra")
+                carta2 = undefined
+                contador = contador -1;
+            }
+
+
             if (contador == 2) {
                 check()
             }
 
 
+
+
+        }
+
+        function timer() {
+
+            setInterval(() => {
+                sec = sec + 1;
+
+                if (sec > 59) {
+                    sec = 0;
+                    min = min + 1;
+                }
+
+                if (min == 59 && sec == 59) {
+
+                    tiempo = false;
+                    bTimeout = true;
+                    for (let i = 0; i < cartas; i++) {
+                        for (let j = 0; j < palos; j++) {
+                            aEstado[i][j] = true;
+                        }
+                    }
+                    terminar()
+                }
+                document.getElementById('tSec').innerHTML = sec
+
+                document.getElementById('tMin').innerHTML = min
+
+
+            }, 1000)
+
+
+
         }
 
         function check() {
+
             if (carta1 == carta2) {
 
                 aEstado[check1[0]][check1[1]] = true;
@@ -109,18 +143,26 @@
                 }, 1000)
 
             }
+            click = click + 1
+            document.getElementById('tCLick').innerHTML = click
         }
 
         function terminar() {
             let bTerminado = true;
+            if (bTimeout) {
+                alert("Has perdido se ha acabado el tiempo")
+                bTerminado = false
+            }
+
+
             for (let i = 0; i < cartas; i++) {
                 for (let j = 0; j < palos; j++) {
                     bTerminado = bTerminado && aEstado[i][j]
                 }
             }
 
-            if(bTerminado){
-            alert("Felicidades has terminado el juego")
+            if (bTerminado) {
+                alert("Felicidades has terminado el juego")
             }
 
 
